@@ -1,0 +1,24 @@
+{
+  "name": "event_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kurtNickSasha/event_tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kurtNickSasha/event_tracker/issues"
+  },
+  "homepage": "https://github.com/kurtNickSasha/event_tracker#readme",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "envify": "^4.1.0"
+  }
+}
