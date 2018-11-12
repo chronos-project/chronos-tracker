@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kurtNickSasha/event_tracker.git"
+    "url": "git+https://github.com/chronos-project/chronos-tracker.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kurtNickSasha/event_tracker/issues"
+    "url": "https://github.com/chronos-project/chronos-tracker/issues"
   },
-  "homepage": "https://github.com/kurtNickSasha/event_tracker#readme",
+  "homepage": "https://github.com/chronos-project/chronos-tracker#readme",
   "dependencies": {
     "browserify": "^16.2.3",
     "envify": "^4.1.0"
