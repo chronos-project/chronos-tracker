@@ -82,7 +82,6 @@ function createQueue(maxSize) {
 
     checkMax () {
       if (size >= max) {
-        console.log('flushing!');
         this.flush();
       }
     },
@@ -120,7 +119,6 @@ const sendData = (url, json) => {
     .then(json => console.log(json))
     .catch(error => console.log(error));
   } else {
-    // const blob = new Blob([json], {type: 'application/json; charset=utf-8'});
     navigator.sendBeacon(url, json);
   }
 }
@@ -128,8 +126,6 @@ const sendData = (url, json) => {
 module.exports = sendData;
 
 },{}],4:[function(require,module,exports){
-// window.axios = require('axios');
-
 const createQueue = require('./queue');
 const queue = createQueue(50);
 
@@ -189,10 +185,6 @@ const getEventData = (eType, e) => {
   }
 }
 
-// const formatToJSON = (eType, e) => {
-//   return JSON.stringify(getEventData(eType, e));
-// }
-
 const addToQueue = (eType, e) => {
   queue.add(getEventData(eType, e));
 }
@@ -202,6 +194,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
   let prevMousePos;
 
   const events = {"linkClicks":true,"clicks":true,"pageviews":true,"mousemoves":false,"formSubmits":true,"keypress":true};
+
+  document.addEventListener('beforeunload', event => {
+    queue.flush();
+  });
 
   if (events.pageviews) {
     (() => {
@@ -213,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
 
       addToQueue('clicks', event);
@@ -226,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
     });
   }
@@ -261,11 +255,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.formSubmits) {
     document.addEventListener('submit', (event) => {
-      event.preventDefault();
-
       addToQueue('form_submission', event);
-      queue.flush();
-      event.target.submit();
     });
   }
 });

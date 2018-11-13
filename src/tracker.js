@@ -1,5 +1,3 @@
-// window.axios = require('axios');
-
 const createQueue = require('./queue');
 const queue = createQueue(process.env['queueSize']);
 
@@ -59,10 +57,6 @@ const getEventData = (eType, e) => {
   }
 }
 
-// const formatToJSON = (eType, e) => {
-//   return JSON.stringify(getEventData(eType, e));
-// }
-
 const addToQueue = (eType, e) => {
   queue.add(getEventData(eType, e));
 }
@@ -72,6 +66,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
   let prevMousePos;
 
   const events = process.env['events'];
+
+  document.addEventListener('beforeunload', event => {
+    queue.flush();
+  });
 
   if (events.pageviews) {
     (() => {
@@ -83,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
 
       addToQueue('clicks', event);
@@ -96,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
     });
   }
@@ -131,11 +127,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.formSubmits) {
     document.addEventListener('submit', (event) => {
-      event.preventDefault();
-
       addToQueue('form_submission', event);
-      queue.flush();
-      event.target.submit();
     });
   }
 });
