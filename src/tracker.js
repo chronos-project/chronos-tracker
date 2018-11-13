@@ -29,13 +29,13 @@ const getEventData = (eType, e) => {
         y: e.y,
         timestamp,
       };
-    case 'key_press':
+    case 'key_presses':
       return {
         eType,
         key: e.key,
         timestamp,
       };
-    case 'form_submission':
+    case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
       const data = {
         eType,
@@ -44,7 +44,7 @@ const getEventData = (eType, e) => {
       inputs.forEach(input => data[input.name] = input.value);
 
       return data;
-    case 'pageview': {
+    case 'pageviews': {
       return {
         eType,
         url: window.location.href,
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.pageviews) {
     (() => {
-      addToQueue('pageview');
+      addToQueue('pageviews');
     })();
   }
 
@@ -121,13 +121,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.keypress) {
     document.addEventListener('keypress', (event) => {
-      addToQueue('key_press', event);
+      addToQueue('key_presses', event);
     });
   }
 
   if (events.formSubmits) {
     document.addEventListener('submit', (event) => {
-      addToQueue('form_submission', event);
+      addToQueue('form_submissions', event);
     });
   }
 });
