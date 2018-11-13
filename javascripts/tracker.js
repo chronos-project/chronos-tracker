@@ -127,7 +127,7 @@ module.exports = sendData;
 
 },{}],4:[function(require,module,exports){
 const createQueue = require('./queue');
-const queue = createQueue(50);
+const queue = createQueue(5000);
 
 const getEventData = (eType, e) => {
   const timestamp = Date.now(); // NEEDS TO REFLECT CLIENT TIME -- must fix
@@ -165,13 +165,14 @@ const getEventData = (eType, e) => {
       };
     case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
-      const data = {
-        eType,
-      };
+      const data = {};
 
       inputs.forEach(input => data[input.name] = input.value);
 
-      return data;
+      return {
+        eType,
+        data,
+      };
     case 'pageviews': {
       return {
         eType,
@@ -193,9 +194,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
   let mousePos;
   let prevMousePos;
 
-  const events = {"linkClicks":true,"clicks":true,"pageviews":true,"mousemoves":false,"formSubmits":true,"keypress":true};
+  const events = {"linkClicks":true,"clicks":true,"pageviews":true,"mousemoves":true,"formSubmits":true,"keypress":true};
 
-  document.addEventListener('beforeunload', event => {
+  window.addEventListener('beforeunload', event => {
     queue.flush();
   });
 

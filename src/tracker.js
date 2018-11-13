@@ -37,13 +37,14 @@ const getEventData = (eType, e) => {
       };
     case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
-      const data = {
-        eType,
-      };
+      const data = {};
 
       inputs.forEach(input => data[input.name] = input.value);
 
-      return data;
+      return {
+        eType,
+        data,
+      };
     case 'pageviews': {
       return {
         eType,
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   const events = process.env['events'];
 
-  document.addEventListener('beforeunload', event => {
+  window.addEventListener('beforeunload', event => {
     queue.flush();
   });
 
