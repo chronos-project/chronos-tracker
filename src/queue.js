@@ -16,7 +16,6 @@ function createQueue(maxSize) {
 
     checkMax () {
       if (size >= max) {
-        console.log('flushing!');
         this.flush();
       }
     },
