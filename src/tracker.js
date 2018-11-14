@@ -1,5 +1,3 @@
-// window.axios = require('axios');
-
 const createQueue = require('./queue');
 const queue = createQueue(process.env['queueSize']);
 
@@ -31,22 +29,23 @@ const getEventData = (eType, e) => {
         y: e.y,
         timestamp,
       };
-    case 'key_press':
+    case 'key_presses':
       return {
         eType,
         key: e.key,
         timestamp,
       };
-    case 'form_submission':
+    case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
-      const data = {
-        eType,
-      };
+      const data = {};
 
       inputs.forEach(input => data[input.name] = input.value);
 
-      return data;
-    case 'pageview': {
+      return {
+        eType,
+        data,
+      };
+    case 'pageviews': {
       return {
         eType,
         url: window.location.href,
@@ -59,10 +58,6 @@ const getEventData = (eType, e) => {
   }
 }
 
-// const formatToJSON = (eType, e) => {
-//   return JSON.stringify(getEventData(eType, e));
-// }
-
 const addToQueue = (eType, e) => {
   queue.add(getEventData(eType, e));
 }
@@ -73,9 +68,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   const events = process.env['events'];
 
+  window.addEventListener('beforeunload', event => {
+    queue.flush();
+  });
+
   if (events.pageviews) {
     (() => {
-      addToQueue('pageview');
+      addToQueue('pageviews');
     })();
   }
 
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
 
       addToQueue('clicks', event);
@@ -96,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
     });
   }
@@ -125,17 +122,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.keypress) {
     document.addEventListener('keypress', (event) => {
-      addToQueue('key_press', event);
+      addToQueue('key_presses', event);
     });
   }
 
   if (events.formSubmits) {
     document.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      addToQueue('form_submission', event);
-      queue.flush();
-      event.target.submit();
+      addToQueue('form_submissions', event);
     });
   }
 });

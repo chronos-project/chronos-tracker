@@ -1,11 +1,11 @@
 {
-  "queueSize": 50,
+  "queueSize": 5000,
   "errorHandling": true,
   "events": {
     "linkClicks": true,
     "clicks": true,
     "pageviews": true,
-    "mousemoves": false,
+    "mousemoves": true,
     "formSubmits": true,
     "keypress": true
   }

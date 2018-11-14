@@ -82,7 +82,6 @@ function createQueue(maxSize) {
 
     checkMax () {
       if (size >= max) {
-        console.log('flushing!');
         this.flush();
       }
     },
@@ -120,7 +119,6 @@ const sendData = (url, json) => {
     .then(json => console.log(json))
     .catch(error => console.log(error));
   } else {
-    // const blob = new Blob([json], {type: 'application/json; charset=utf-8'});
     navigator.sendBeacon(url, json);
   }
 }
@@ -128,10 +126,8 @@ const sendData = (url, json) => {
 module.exports = sendData;
 
 },{}],4:[function(require,module,exports){
-// window.axios = require('axios');
-
 const createQueue = require('./queue');
-const queue = createQueue(50);
+const queue = createQueue(5000);
 
 const getEventData = (eType, e) => {
   const timestamp = Date.now(); // NEEDS TO REFLECT CLIENT TIME -- must fix
@@ -161,22 +157,23 @@ const getEventData = (eType, e) => {
         y: e.y,
         timestamp,
       };
-    case 'key_press':
+    case 'key_presses':
       return {
         eType,
         key: e.key,
         timestamp,
       };
-    case 'form_submission':
+    case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
-      const data = {
-        eType,
-      };
+      const data = {};
 
       inputs.forEach(input => data[input.name] = input.value);
 
-      return data;
-    case 'pageview': {
+      return {
+        eType,
+        data,
+      };
+    case 'pageviews': {
       return {
         eType,
         url: window.location.href,
@@ -189,10 +186,6 @@ const getEventData = (eType, e) => {
   }
 }
 
-// const formatToJSON = (eType, e) => {
-//   return JSON.stringify(getEventData(eType, e));
-// }
-
 const addToQueue = (eType, e) => {
   queue.add(getEventData(eType, e));
 }
@@ -201,11 +194,15 @@ document.addEventListener('DOMContentLoaded', function(event) {
   let mousePos;
   let prevMousePos;
 
-  const events = {"linkClicks":true,"clicks":true,"pageviews":true,"mousemoves":false,"formSubmits":true,"keypress":true};
+  const events = {"linkClicks":true,"clicks":true,"pageviews":true,"mousemoves":true,"formSubmits":true,"keypress":true};
+
+  window.addEventListener('beforeunload', event => {
+    queue.flush();
+  });
 
   if (events.pageviews) {
     (() => {
-      addToQueue('pageview');
+      addToQueue('pageviews');
     })();
   }
 
@@ -213,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
 
       addToQueue('clicks', event);
@@ -226,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.addEventListener('click', function(event) {
       if (event.target.tagName === 'A') {
         addToQueue('link_clicks', event);
-        queue.flush();
       }
     });
   }
@@ -255,17 +250,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   if (events.keypress) {
     document.addEventListener('keypress', (event) => {
-      addToQueue('key_press', event);
+      addToQueue('key_presses', event);
     });
   }
 
   if (events.formSubmits) {
     document.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      addToQueue('form_submission', event);
-      queue.flush();
-      event.target.submit();
+      addToQueue('form_submissions', event);
     });
   }
 });
