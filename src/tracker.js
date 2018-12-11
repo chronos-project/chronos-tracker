@@ -2,7 +2,7 @@ const createQueue = require('./queue');
 const queue = createQueue(process.env['queueSize']);
 
 const getEventData = (eType, e) => {
-  const timestamp = Date.now(); // NEEDS TO REFLECT CLIENT TIME -- must fix
+  const timestamp = Date.now();
 
   switch (eType) {
     case 'link_clicks':
@@ -44,6 +44,7 @@ const getEventData = (eType, e) => {
       return {
         eType,
         data,
+        timestamp,
       };
     case 'pageviews': {
       return {
