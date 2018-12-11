@@ -24,7 +24,7 @@ function createQueue(maxSize) {
       const json = JSON.stringify(appendMetadataToEvents(buffer));
 
       this.clear();
-      sendData(`${API_URL}/testing`, json);
+      sendData(`${API_URL}/events`, json);
     },
 
     clear () {

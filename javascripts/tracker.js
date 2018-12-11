@@ -90,7 +90,7 @@ function createQueue(maxSize) {
       const json = JSON.stringify(appendMetadataToEvents(buffer));
 
       this.clear();
-      sendData(`${API_URL}/testing`, json);
+      sendData(`${API_URL}/events`, json);
     },
 
     clear () {
@@ -130,7 +130,7 @@ const createQueue = require('./queue');
 const queue = createQueue(5000);
 
 const getEventData = (eType, e) => {
-  const timestamp = Date.now(); // NEEDS TO REFLECT CLIENT TIME -- must fix
+  const timestamp = Date.now();
 
   switch (eType) {
     case 'link_clicks':
