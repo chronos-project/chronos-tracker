@@ -87,7 +87,11 @@ function createQueue(maxSize) {
     },
 
     flush () {
-      const json = JSON.stringify(appendMetadataToEvents(buffer));
+      const data = appendMetadataToEvents(buffer);
+      const json = JSON.stringify({
+        "ACCESS_KEY": "922644b1d1e76d4819f3e4d37cba5c93780ce90314954c1046e7e7dc56fc840a925764b4aa41e89523a0ac4ecb5a79b15e32e87de4d12cbd7479ab73693990f1",
+        data
+      });
 
       this.clear();
       sendData(`${API_URL}/events`, json);
@@ -172,6 +176,7 @@ const getEventData = (eType, e) => {
       return {
         eType,
         data,
+        timestamp,
       };
     case 'pageviews': {
       return {
