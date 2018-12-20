@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 const sendData = (url, json) => {
   if (process.env['errorHandling']) {
     fetch(url, {
