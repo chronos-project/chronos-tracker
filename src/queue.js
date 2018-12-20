@@ -1,15 +1,16 @@
 const { getUserAgent, appendMetadataToEvents } = require('./metadata');
+const Serializer = require('./serializer');
 const sendData = require('./sendData');
 const API_URL = 'http://localhost:3000/api';
 
 function createQueue(maxSize) {
-  let buffer = [];
+  let queue = [];
   let size = 0;
   let max = maxSize;
 
   const Queue = {
     add (event) {
-      buffer.push(event);
+      queue.push(event);
       size += 1;
       this.checkMax();
     },
@@ -21,18 +22,20 @@ function createQueue(maxSize) {
     },
 
     flush () {
-      const data = appendMetadataToEvents(buffer);
+      const data = appendMetadataToEvents(queue);
       const json = JSON.stringify({
-        "ACCESS_KEY": "922644b1d1e76d4819f3e4d37cba5c93780ce90314954c1046e7e7dc56fc840a925764b4aa41e89523a0ac4ecb5a79b15e32e87de4d12cbd7479ab73693990f1",
+        "ACCESS_KEY": "ad67cb6c0642ebb887bd5b3ad1b12121525238e48f36b403aa86c08068a3752075b45c4d6f60d6d3ef41e1132b149bc423ae5df60d56e4205814eac07f628a85",
         data
       });
+      const binary = Serializer.stringToBinary(json);
+      const buffer = Serializer.stringToBuffer(binary);
 
       this.clear();
-      sendData(`${API_URL}/events`, json);
+      sendData(`${API_URL}/events`, buffer);
     },
 
     clear () {
-      buffer = [];
+      queue = [];
       size = 0;
     },
   }

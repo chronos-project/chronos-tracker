@@ -1,20 +1,20 @@
 import 'whatwg-fetch';
 
-const sendData = (url, json) => {
+const sendData = (url, buffer) => {
   if (process.env['errorHandling']) {
     fetch(url, {
       method: "POST",
-      mode: "cors",
       headers: {
-        "Content-Type": "application/json; charset=utf-8",
+        'Content-Type': 'application/octet-stream'
       },
-      body: json,
+      mode: "cors",
+      body: buffer,
     })
     .then(response => response.json())
     .then(json => console.log(json))
     .catch(error => console.log(error));
   } else {
-    navigator.sendBeacon(url, json);
+    navigator.sendBeacon(url, buffer);
   }
 }
 
