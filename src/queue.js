@@ -27,11 +27,9 @@ function createQueue(maxSize) {
         "ACCESS_KEY": "ad67cb6c0642ebb887bd5b3ad1b12121525238e48f36b403aa86c08068a3752075b45c4d6f60d6d3ef41e1132b149bc423ae5df60d56e4205814eac07f628a85",
         data
       });
-      const binary = Serializer.stringToBinary(json);
-      const buffer = Serializer.stringToBuffer(binary);
 
       this.clear();
-      sendData(`${API_URL}/events`, buffer);
+      sendData(`${API_URL}/events`, json);
     },
 
     clear () {
