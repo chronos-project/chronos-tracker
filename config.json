@@ -1,6 +1,6 @@
 {
   "queueSize": 5000,
-  "errorHandling": true,
+  "errorHandling": false,
   "events": {
     "linkClicks": true,
     "clicks": true,

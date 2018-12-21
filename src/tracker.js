@@ -6,60 +6,60 @@ const getEventData = (eType, e) => {
 
   switch (eType) {
     case 'link_clicks':
-      return {
+      return [
         eType,
-        linkText: e.target.firstChild.textContent,
-        targetURL: e.target.href,
-        timestamp,
-      };
-      break;
+        e.target.firstChild.textContent, // linkText
+        e.target.href, // targetURL
+        timestamp
+      ];
     case 'clicks':
-      return {
+      return [
         eType,
-        target_node: e.target.nodeName,
-        buttons: e.buttons,
-        x: e.clientX,
-        y: e.clientY,
-        timestamp,
-      };
+        e.target.nodeName, // target_node
+        e.buttons, // buttons
+        e.clientX, // x
+        e.clientY, // y
+        timestamp
+      ];
     case 'mouse_moves':
-      return {
+      return [
         eType,
-        x: e.x,
-        y: e.y,
-        timestamp,
-      };
+        e.x, // x
+        e.y, // y
+        timestamp
+      ];
     case 'key_presses':
-      return {
+      return [
         eType,
-        key: e.key,
-        timestamp,
-      };
+        e.key, // key
+        timestamp
+      ];
     case 'form_submissions':
       const inputs = [...e.target.elements].filter(e => e.tagName === 'INPUT');
       const data = {};
 
       inputs.forEach(input => data[input.name] = input.value);
 
-      return {
+      return [
         eType,
         data,
-        timestamp,
-      };
+        timestamp
+      ];
     case 'pageviews': {
-      return {
+      return [
         eType,
-        url: window.location.href,
-        title: document.title,
-        timestamp,
-      };
+        window.location.href, // url
+        document.title, // title
+        timestamp
+      ];
     }
     default:
-      return {};
+      return [];
   }
 }
 
 const addToQueue = (eType, e) => {
+  let eventObj = getEventData(eType, e);
   queue.add(getEventData(eType, e));
 }
 

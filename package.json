@@ -1,7 +1,7 @@
 {
-  "name": "event_tracker",
-  "version": "1.0.0",
-  "description": "",
+  "name": "chronos_event_tracker",
+  "version": "0.9.0",
+  "description": "event tracker for chronos framework",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,6 +19,12 @@
   "homepage": "https://github.com/chronos-project/chronos-tracker#readme",
   "dependencies": {
     "browserify": "^16.2.3",
-    "envify": "^4.1.0"
+    "envify": "^4.1.0",
+    "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babelify": "^10.0.0"
   }
 }
