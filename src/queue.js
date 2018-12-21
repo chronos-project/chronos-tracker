@@ -1,5 +1,4 @@
 const { getUserAgent, appendMetadataToEvents } = require('./metadata');
-const Serializer = require('./serializer');
 const sendData = require('./sendData');
 const API_URL = 'http://localhost:3000/api';
 
