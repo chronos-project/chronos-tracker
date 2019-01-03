@@ -4,7 +4,7 @@
 ![chronos version](https://img.shields.io/badge/version-0.9.0--beta-orange.svg)
 ![license](https://img.shields.io/badge/license-MIT-green.svg)
 ## Overview
-Chronos is an event-capturing framework for greenfield applications and is built with NodeJS, Apache Kafka, TimescaleDB, and PipelineDB. This repository contians the tracker file which captures events on the client side and sends them to the data pipeline.
+Chronos is an event-capturing framework for greenfield applications and is built with NodeJS, Apache Kafka, TimescaleDB, and PipelineDB. This repository contians the tracker file which captures events on the client side and sends them to the data pipeline. You can read about our story of creating Chronos [here](https://chronos-project.github.io/casestudy.html).
 
 ## Installation
 To build the tracker file you must have [NodeJS](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed on your machine. Inside the root directory of the repository there is a `config.json` file. The properties are as follows:
